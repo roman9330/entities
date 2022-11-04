@@ -4,6 +4,7 @@ require_once PROJECT_ROOT_PATH . "/Model/database.php";
 
 class BandModel extends Database
 {
+
     /**
      * @throws Exception
      */
