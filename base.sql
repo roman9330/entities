@@ -302,47 +302,46 @@ DELIMITER ;
 -- Дамп структуры для процедура entities._bandSelect
 DELIMITER //
 CREATE PROCEDURE `_bandSelect`(
-	IN `p_guid` VARCHAR(36),
 	IN `p_name` VARCHAR(255),
+	IN `p_code` VARCHAR(50),
 	IN `lim` INT
 )
 BEGIN
 DECLARE nameStr VARCHAR(255);
-
 SET nameStr = CONCAT('%', p_name, '%');
 
 if p_name = ''
 then
-	if p_guid = ''
+	if p_code = ''
 	then
-		SELECT b.`id`, b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM band b 
 		INNER JOIN band_type bt ON b.`type` = bt.id
 		INNER JOIN band_i18n bi ON b.id = bi.row_id
 		ORDER BY id LIMIT lim;
 	else
-		SELECT b.`id`, b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM band b 
 		INNER JOIN band_type bt ON b.`type` = bt.id
 		INNER JOIN band_i18n bi ON b.id = bi.row_id 
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 ELSE
-	if p_guid = ''
+	if p_code = ''
 	then
-		SELECT distinct b.`id`, b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT distinct b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM band b 
 		INNER JOIN band_type bt ON b.`type` = bt.id
 		INNER JOIN band_i18n bi ON b.id = bi.row_id
 		INNER JOIN (SELECT `row_id`, `language` FROM band_i18n WHERE `name` LIKE nameStr) s ON b.id = s.row_id -- AND bi.`language` = s.`language` 
 		ORDER BY b.id LIMIT lim;
 	else
-		SELECT distinct b.`id`, b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT distinct b.`guid`, `code`, `w`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM band b 
 		INNER JOIN band_type bt ON b.`type` = bt.id
 		INNER JOIN band_i18n bi ON b.id = bi.row_id 
 		INNER JOIN (SELECT `row_id`, `language` FROM band_i18n WHERE `name` LIKE nameStr) s ON b.id = s.row_id -- AND bi.`language` = s.`language`
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 END if;
 END//
@@ -470,47 +469,46 @@ DELIMITER ;
 -- Дамп структуры для процедура entities._materialSelect
 DELIMITER //
 CREATE PROCEDURE `_materialSelect`(
-	IN `p_guid` VARCHAR(36),
 	IN `p_name` VARCHAR(255),
+	IN `p_code` VARCHAR(50),
 	IN `lim` INT
 )
 BEGIN
 DECLARE nameStr VARCHAR(255);
-
 SET nameStr = CONCAT('%', p_name, '%');
 
 if p_name = ''
 then
-	if p_guid = ''
+	if p_code = ''
 	then
-		SELECT b.`id`, b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM material b 
 		INNER JOIN material_type bt ON b.`type` = bt.id
 		INNER JOIN material_i18n bi ON b.id = bi.row_id
 		ORDER BY id LIMIT lim;
 	else
-		SELECT b.`id`, b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM material b 
 		INNER JOIN material_type bt ON b.`type` = bt.id
 		INNER JOIN material_i18n bi ON b.id = bi.row_id 
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 ELSE
-	if p_guid = ''
+	if p_code = ''
 	then
-		SELECT distinct b.`id`, b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT distinct b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM material b 
 		INNER JOIN material_type bt ON b.`type` = bt.id
 		INNER JOIN material_i18n bi ON b.id = bi.row_id
 		INNER JOIN (SELECT `row_id`, `language` FROM material_i18n WHERE `name` LIKE nameStr) s ON b.id = s.row_id -- AND bi.`language` = s.`language` 
 		ORDER BY b.id LIMIT lim;
 	else
-		SELECT distinct b.`id`, b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
+		SELECT distinct b.`guid`, `code`, `w`, `l`, `t`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM material b 
 		INNER JOIN material_type bt ON b.`type` = bt.id
 		INNER JOIN material_i18n bi ON b.id = bi.row_id 
 		INNER JOIN (SELECT `row_id`, `language` FROM material_i18n WHERE `name` LIKE nameStr) s ON b.id = s.row_id -- AND bi.`language` = s.`language`
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 END if;
 END//
@@ -640,8 +638,8 @@ DELIMITER ;
 -- Дамп структуры для процедура entities._serviceSelect
 DELIMITER //
 CREATE PROCEDURE `_serviceSelect`(
-	IN `p_guid` VARCHAR(36),
 	IN `p_name` VARCHAR(255),
+	IN `p_code` VARCHAR(50),
 	IN `lim` INT
 )
 BEGIN
@@ -651,7 +649,7 @@ SET nameStr = CONCAT('%', p_name, '%');
 
 if p_name = ''
 then
-	if p_guid = ''
+	if p_code = ''
 	then
 		SELECT b.`id`, b.`guid`, `code`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM service b 
@@ -663,10 +661,10 @@ then
 		FROM service b 
 		INNER JOIN service_type bt ON b.`type` = bt.id
 		INNER JOIN service_i18n bi ON b.id = bi.row_id 
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 ELSE
-	if p_guid = ''
+	if p_code = ''
 	then
 		SELECT distinct b.`id`, b.`guid`, `code`, bi.`name`, bi.`description`, bt.`name` AS typename, bi.`language`
 		FROM service b 
@@ -680,7 +678,7 @@ ELSE
 		INNER JOIN service_type bt ON b.`type` = bt.id
 		INNER JOIN service_i18n bi ON b.id = bi.row_id 
 		INNER JOIN (SELECT `row_id`, `language` FROM service_i18n WHERE `name` LIKE nameStr) s ON b.id = s.row_id -- AND bi.`language` = s.`language`
-		WHERE b.guid = p_guid;
+		WHERE b.`code` = p_code;
 	END if;
 END if;
 END//
