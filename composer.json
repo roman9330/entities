@@ -1,7 +1,14 @@
 {
-    "require": {
-        "kint-php/kint": "^4.2",
-        "kint-php/kint-helpers": "^4.0",
-        "ext-mysqli": "*"
-    }
+  "require": {
+    "kint-php/kint": "^4.2",
+    "kint-php/kint-helpers": "^4.0",
+    "ext-mysqli": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "inc/"
+    ]
+  }
 }

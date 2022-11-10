@@ -52,6 +52,7 @@ class BandController extends BaseController
         try {
             $bandModel = new BandModel();
             $arrBands = $bandModel->getBands($this->params);
+            $arrBands = $this->formatJson($arrBands);
             $responseData = json_encode($arrBands, JSON_UNESCAPED_UNICODE);
         } catch (Error $e) {
             $strErrorDesc = $e->getMessage() . "Что-то пошло не так!";
@@ -68,5 +69,25 @@ class BandController extends BaseController
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
+    }
+
+    private function formatJson(array $recordset)
+    {
+        $result = [];
+        $oGuid = '';
+        foreach ($recordset as $record){
+            if ($oGuid <> $record['guid']){
+                $oGuid = $record['guid'];
+                $result[$oGuid]['guid']=$oGuid;
+                $result[$oGuid]['code'] = $record['code'];
+                $result[$oGuid]['w'] = $record['w'];
+                $result[$oGuid]['t'] = $record['t'];
+                }
+            $result[$oGuid][$record['language']]['name']=$record['name'];
+            $result[$oGuid][$record['language']]['description']=$record['description'];
+        }
+        $result = json_encode($result);
+        print_r($result);
+
     }
 }

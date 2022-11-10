@@ -14,7 +14,7 @@ class BaseController
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         if (strtoupper($requestMethod) == 'GET') {
             $arrQueryStringParams = $this->getQueryStringParams();
-        } else{
+        } else {
             $json = file_get_contents('php://input');;
             $arrQueryStringParams = json_decode($json, 1);
         }
@@ -39,16 +39,17 @@ class BaseController
         return $query;
     }
 
-    protected function sendOutput($data, $httpHeaders=array())
+    protected function sendOutput($data, $httpHeaders = array())
     {
         header_remove('Set-Cookie');
-
-        if(is_array($httpHeaders) && count($httpHeaders)){
-            foreach ($httpHeaders as $httpHeader){
+        $data = UnsafeOpensslAES::encrypt($data, AUTH_TOKEN);
+        if (is_array($httpHeaders) && count($httpHeaders)) {
+            foreach ($httpHeaders as $httpHeader) {
                 header($httpHeader);
             }
         }
-        echo $data;
+        echo UnsafeOpensslAES::decrypt($data, headerAuth::getBearerToken() ?? 'fhjk');
+
         exit;
     }
 }

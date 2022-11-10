@@ -6,6 +6,9 @@ require __DIR__ . "/vendor/autoload.php";
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', $uri);
 
+//echo crypt('ddfdsfdf',time());
+//die();
+
 if ((!isset($uri[1])) || !isset($uri[2])) {
     header("HTTP/1.1 404 Not Found");
     exit();
